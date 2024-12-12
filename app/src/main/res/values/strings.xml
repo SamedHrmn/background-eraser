@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Background Remover</string>
+    <string name="privacy_policy_menu">Privacy Policy</string>
+    <string name="licences_menu">Licences</string>
+    <string name="share_menu">Share App</string>
+    <string name="feedback_menu">Share App</string>
+    <string name="feedback_menu_error_text">Cannot find email app</string>
+    <string name="feedback_dialog_send_feedback_button_text">Send</string>
+    <string name="crop_activity_title">Crop</string>
+    <string name="analyze_image_button_text">Analyze Photo</string>
+    <string name="error_dialog_text">Something went wrong during image analyzing</string>
+    <string name="error_dialog_confirm_button_text">Confirm</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="no_result_dialog_title">No Result Found</string>
+    <string name="no_result_dialog_text">I can not apply any process your image, sorry. Can you try different image?</string>
+    <string name="no_result_dialog_confirm_button_text">Okay</string>
+    <string name="storage_permission_rationale_dialog_confirm_button_text">Confirm</string>
+    <string name="storage_permission_rationale_dialog_title">Need Permission</string>
+    <string name="storage_permission_rationale_dialog_text">I need a storage permission for saving your processed images.</string>
+    <string name="save_button_text">Save</string>
+    <string name="save_success_text">Saving Success!</string>
+    <string name="save_error_text">Error during save images!</string>
+    <string name="cancel_button_text">Cancel</string>
+    <string name="open_folder_button_text">Open Saved Images</string>
+    <string name="open_folder_error_text">Error during open saved images!</string>
+</resources>

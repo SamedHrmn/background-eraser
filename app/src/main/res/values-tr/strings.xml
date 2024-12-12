@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Arka Plan&amp;Obje Kaldırıcı</string>
+    <string name="privacy_policy_menu">Gizlilik Politikası</string>
+    <string name="licences_menu">Lisanslar</string>
+    <string name="share_menu">Uygulamayı Paylaş</string>
+    <string name="feedback_menu">Geri Bildirim Gönder</string>
+    <string name="feedback_menu_error_text">Email uygulaması bulunamadı.</string>
+    <string name="feedback_dialog_send_feedback_button_text">Gönder</string>
+    <string name="crop_activity_title">Kırp</string>
+    <string name="analyze_image_button_text">Analiz Et</string>
+    <string name="error_dialog_text">Fotoğraf analizi esnasında bir sorun oluştu.</string>
+    <string name="error_dialog_confirm_button_text">Tamam</string>
+    <string name="error_dialog_title">Hata</string>
+    <string name="no_result_dialog_title">Sonuç Alamadım</string>
+    <string name="no_result_dialog_text">Yüklediğiniz fotoğrafa herhangi bir işlem yapamadım, özür dilerim. Başka bir fotoğraf deneyebilir misiniz?</string>
+    <string name="no_result_dialog_confirm_button_text">Tamam</string>
+    <string name="storage_permission_rationale_dialog_confirm_button_text">Tamam</string>
+    <string name="storage_permission_rationale_dialog_title">İzin Gerekli</string>
+    <string name="storage_permission_rationale_dialog_text">İşlenen fotoğrafları kaydedebilmem için depolama izni gerekli.</string>
+    <string name="save_button_text">Kaydet</string>
+    <string name="save_success_text">Başarıyla Kaydettik!</string>
+    <string name="save_error_text">Kayıt esnasında bir hata oluştu!</string>
+    <string name="cancel_button_text">İptal</string>
+    <string name="open_folder_button_text">Open Saved Images</string>
+    <string name="open_folder_error_text">Klasör açılırken hata oluştu!</string>
+</resources>
