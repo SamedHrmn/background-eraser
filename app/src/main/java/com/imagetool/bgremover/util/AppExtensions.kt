@@ -1,13 +1,10 @@
 package com.imagetool.bgremover.util
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector2D
 import androidx.compose.animation.core.Spring
@@ -48,43 +45,6 @@ fun Context.showToast(text: String) {
     ).show()
 }
 
-fun Context.sendFeedback(text: String, onError: () -> Unit) {
-    val recipient = "xxsamedx@gmail.com" // Hi hackers. This is contact mail.
-    val subject = "App Feedback"
-    val appVersion = packageManager.getPackageInfo(packageName, 0).versionName
-    val androidVersion = Build.VERSION.RELEASE
-    val deviceModel = "${Build.MANUFACTURER} ${Build.MODEL}"
-
-    val body = """
-        $text
-
-        ---
-        App Version: $appVersion
-        Android Version: $androidVersion
-        Device: $deviceModel
-        ---
-    """.trimIndent()
-
-    val selectorIntent = Intent(Intent.ACTION_SENDTO).apply {
-        data = Uri.parse("mailto:") // only email apps should handle this
-    }
-    val emailIntent = Intent(Intent.ACTION_SEND).apply {
-        putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
-        putExtra(Intent.EXTRA_SUBJECT, subject)
-        putExtra(Intent.EXTRA_TEXT, body)
-        selector = selectorIntent
-    }
-    if (emailIntent.resolveActivity(packageManager) != null) {
-        try {
-            startActivity(emailIntent)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            onError()
-        }
-    }
-}
-
-
 suspend fun isUrlReachable(url: String): Boolean {
     return withContext(Dispatchers.IO) {
         try {
@@ -95,18 +55,6 @@ suspend fun isUrlReachable(url: String): Boolean {
             false
         }
     }
-}
-
-
-fun Context.showShareSheet(text: String) {
-    val sendIntent: Intent = Intent().apply {
-        action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_TEXT, text)
-        type = "text/plain"
-    }
-
-    val shareIntent = Intent.createChooser(sendIntent, null)
-    startActivity(shareIntent)
 }
 
 fun Modifier.animatePlacement(): Modifier = composed {

@@ -76,6 +76,7 @@
 
 
         <!-- Trigger Google Play services to install the backported photo picker module. -->
+        <!--suppress AndroidDomInspection -->
         <service
             android:name="com.google.android.gms.metadata.ModuleDependencies"
             android:enabled="false"

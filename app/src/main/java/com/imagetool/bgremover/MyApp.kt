@@ -1,11 +1,9 @@
 package com.imagetool.bgremover
 
 import android.app.Activity
-import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,47 +18,51 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.imagetool.bgremover.ui.composables.AppLoadingOverlay
-import com.imagetool.bgremover.ui.composables.AppTopBar
-import com.imagetool.bgremover.ui.composables.OpenDirectoryButton
-import com.imagetool.bgremover.ui.composables.PickAndCropImageFromGalleryBuilder
-import com.imagetool.bgremover.ui.composables.RequestStoragePermission
-import com.imagetool.bgremover.ui.composables.ShowSegmentedImagesBuilder
-import com.imagetool.bgremover.ui.composables.ads.AppBannerAd
-import com.imagetool.bgremover.ui.theme.ImagetoolbackgroundremoverTheme
-import com.imagetool.bgremover.util.AppLocaleProvider
+import com.imagetool.bgremover.common.provider.AppLocaleProvider
+import com.imagetool.bgremover.common.ui.AppLoadingOverlay
+import com.imagetool.bgremover.common.ui.AppTopBar
+import com.imagetool.bgremover.common.ui.OpenDirectoryButton
+import com.imagetool.bgremover.common.ui.ads.AppBannerAd
+import com.imagetool.bgremover.features.erase.BackgroundEraserViewModel
+import com.imagetool.bgremover.features.erase.data.BackgroundEraserResultState
+import com.imagetool.bgremover.features.erase.ui.ShowSegmentedImagesBuilder
+import com.imagetool.bgremover.features.pick_crop.ui.PickAndCropImageFromGalleryBuilder
+import com.imagetool.bgremover.features.pick_crop.ui.RequestStoragePermission
+import com.imagetool.bgremover.features.rate_us.RateUsViewModel
+import com.imagetool.bgremover.features.subscription.SubscriptionViewModel
+import com.imagetool.bgremover.theme.ImagetoolbackgroundremoverTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MyApp(
-    context: Context,
-    mainActivityViewModel: MainActivityViewModel,
-    subscriptionViewModel: SubscriptionViewModel,
+    subscriptionViewModel: SubscriptionViewModel = koinViewModel(),
+    backgroundEraserViewModel: BackgroundEraserViewModel = koinViewModel(),
+    rateUsViewModel: RateUsViewModel = koinViewModel(),
 ) {
-    AppLocaleProvider(context = context) {
+    AppLocaleProvider(context = LocalContext.current) {
         ImagetoolbackgroundremoverTheme {
 
-            val segmentResultState = mainActivityViewModel.segmentResult.collectAsState()
-            val scrollState = rememberScrollState()
-
-            val showReviewState = mainActivityViewModel.showReviewState.collectAsState()
-            val localCtx = LocalContext.current
-
+            val segmentResultState = backgroundEraserViewModel.segmentResult.collectAsState()
+            val showReviewState = rateUsViewModel.showReviewState.collectAsState()
             val isSubscribeState = subscriptionViewModel.isSubscribed.collectAsState()
 
+            val scrollState = rememberScrollState()
+            val localContext = LocalContext.current
+
             LaunchedEffect(showReviewState.value) {
-                mainActivityViewModel.launchReview(
-                    activity = localCtx as Activity,
-                    context = context
+                rateUsViewModel.launchReview(
+                    activity = localContext as Activity,
+                    context = localContext
                 )
             }
 
 
-            AppLoadingOverlay(isLoading = (segmentResultState.value == SegmentResultState.Loading)) {
+            AppLoadingOverlay(isLoading = (segmentResultState.value == BackgroundEraserResultState.Loading)) {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
 
                     topBar = {
-                        AppTopBar(subscriptionViewModel = subscriptionViewModel)
+                        AppTopBar()
                     },
                 ) { innerPadding ->
                     Column(
@@ -78,17 +80,11 @@ fun MyApp(
                                 )
                             )
                         ) {
-                            PickAndCropImageFromGalleryBuilder(
-                                mainActivityViewModel = mainActivityViewModel
-                            )
+                            PickAndCropImageFromGalleryBuilder()
                         }
 
                         RequestStoragePermission {
-                            ShowSegmentedImagesBuilder(
-                                mainActivityViewModel = mainActivityViewModel,
-                                subscriptionViewModel = subscriptionViewModel,
-                                context = context,
-                            )
+                            ShowSegmentedImagesBuilder()
                         }
                         OpenDirectoryButton(
                             modifier = Modifier

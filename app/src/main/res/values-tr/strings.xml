@@ -5,7 +5,7 @@
     <string name="licences_menu">Lisanslar</string>
     <string name="share_menu">Uygulamayı Paylaş</string>
     <string name="feedback_menu">Geri Bildirim Gönder</string>
-    <string name="feedback_menu_error_text">Email uygulaması bulunamadı.</string>
+    <string name="feedback_dialog_error_text">Email uygulaması bulunamadı.</string>
     <string name="feedback_dialog_send_feedback_button_text">Gönder</string>
     <string name="crop_activity_title">Kırp</string>
     <string name="analyze_image_button_text">Analiz Et</string>
@@ -35,6 +35,8 @@
     <string name="subs_features_text1">Reklam yok, başağrısı yok</string>
     <string name="subs_dialog_confirm_button_text">Detayları Gör</string>
     <string name="subs_dialog_cancel_button_text">İptal</string>
+    <string name="feedback_dialog_title">Geri Bildirim Gönder</string>
+    <string name="feedback_dialog_textfield_hint">Bildiriminiz..</string>
     <string name="privacy_policy">**Privacy Policy**\n\n
 
 This privacy policy applies to the Background Eraser app (hereby referred to as "Application") for mobile devices that was created by Samed Harman (hereby referred to as "Service Provider") as an Ad Supported service. This service is intended for use "AS IS".\n\n\n\n
