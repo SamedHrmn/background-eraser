@@ -14,4 +14,7 @@
 .cxx
 local.properties
 /storeKey
+<<<<<<< HEAD
 /app/release
+=======
+>>>>>>> 9e6a0845ee081e6980d48f00c8da6ad6992e046e
