@@ -2,6 +2,8 @@ package com.imagetool.bgremover.ui.composables.dialogs
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
@@ -15,10 +17,11 @@ import com.imagetool.bgremover.util.LocalResources
 @Composable
 fun AppAlertDialog(
     modifier: Modifier = Modifier,
-
-    @StringRes confirmButtonText: Int,
+    @StringRes confirmButtonText: Int? = null,
+    confirmButton: @Composable (() -> Unit)? = null,
     @StringRes titleText: Int,
-    @StringRes contentText: Int,
+    @StringRes contentText: Int? = null,
+    content: @Composable (() -> Unit)? = null,
     onDismiss: () -> Unit,
 ) {
     val showDialogState = remember {
@@ -26,11 +29,12 @@ fun AppAlertDialog(
     }
 
     val localResources = LocalResources.current
+    val scrollState = rememberScrollState()
 
     if (!showDialogState.value) return
 
     AlertDialog(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
         properties = DialogProperties(
             dismissOnBackPress = true,
             dismissOnClickOutside = false,
@@ -41,18 +45,29 @@ fun AppAlertDialog(
             onDismiss()
         },
         confirmButton = {
-            ElevatedButton(onClick = {
-                showDialogState.value = false
-                onDismiss()
-            }) {
-                Text(localResources.getString(confirmButtonText))
+            when {
+                confirmButton != null -> confirmButton()
+                confirmButtonText != null -> {
+                    ElevatedButton(onClick = {
+                        showDialogState.value = false
+                        onDismiss()
+                    }) {
+                        Text(localResources.getString(confirmButtonText))
+                    }
+                }
             }
         },
         title = {
             Text(localResources.getString(titleText))
         },
         text = {
-            Text(localResources.getString(contentText))
+            when {
+                content != null -> content()
+                contentText != null -> Text(
+                    localResources.getString(contentText),
+                    modifier = Modifier.verticalScroll(state = scrollState)
+                )
+            }
         }
     )
 }
