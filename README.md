@@ -4,7 +4,7 @@ A background eraser image tool made with Jetpack Compose. This project use Googl
 ## Features:<br>
 * Erase background of picked image from gallery.<br>
 * Save output image to gallery.<br>
-* Crop selected image.
+* Crop selected image.<br>
 * Showing ads.<br>
 * Offer a subscription plan for use without ads.<br>
 * Showing rate-us dialog.<br>
