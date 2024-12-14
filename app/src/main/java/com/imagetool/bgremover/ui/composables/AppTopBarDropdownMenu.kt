@@ -12,6 +12,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import com.imagetool.bgremover.R
+import com.imagetool.bgremover.ui.composables.dialogs.LicencesDialog
+import com.imagetool.bgremover.ui.composables.dialogs.PrivacyPolicyDialog
 import com.imagetool.bgremover.ui.composables.dialogs.SendFeedbackDialog
 import com.imagetool.bgremover.util.LocalResources
 import com.imagetool.bgremover.util.isUrlReachable
@@ -44,6 +46,8 @@ fun AppTopBarDropdownMenu(dropdownState: MutableState<Boolean>, onDismissRequest
     val playStoreUrl = "https://play.google.com/store/apps/details?id=${localContext.packageName}"
 
     val showSendFeedbackDialogState = remember { mutableStateOf(false) }
+    val showPrivacyPolicyDialogState = remember { mutableStateOf(false) }
+    val showLicencesDialogState = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         coroutineScopeState.launch {
@@ -64,8 +68,14 @@ fun AppTopBarDropdownMenu(dropdownState: MutableState<Boolean>, onDismissRequest
                 dropdownState.value = false
 
                 when (item) {
-                    AppTopBarDropdownMenus.privacyPolicy -> {}
-                    AppTopBarDropdownMenus.licences -> {}
+                    AppTopBarDropdownMenus.privacyPolicy -> {
+                        showPrivacyPolicyDialogState.value = true
+                    }
+
+                    AppTopBarDropdownMenus.licences -> {
+                        showLicencesDialogState.value = true
+                    }
+
                     AppTopBarDropdownMenus.share -> {
                         localContext.showShareSheet(text = playStoreUrl)
                     }
@@ -82,6 +92,14 @@ fun AppTopBarDropdownMenu(dropdownState: MutableState<Boolean>, onDismissRequest
         SendFeedbackDialog(onDismiss = {
             showSendFeedbackDialogState.value = false
         })
+    } else if (showPrivacyPolicyDialogState.value) {
+        PrivacyPolicyDialog(onDismiss = {
+            showPrivacyPolicyDialogState.value = false
+        })
+    } else if (showLicencesDialogState.value) {
+        LicencesDialog {
+            showLicencesDialogState.value = false
+        }
     }
 }
 

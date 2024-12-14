@@ -1,12 +1,13 @@
 package com.imagetool.bgremover.remover
 
+import android.content.Context
 import android.graphics.Bitmap
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.segmentation.subject.SubjectSegmentation
 import com.google.mlkit.vision.segmentation.subject.SubjectSegmenter
 import com.google.mlkit.vision.segmentation.subject.SubjectSegmenterOptions
 
-class ImageSegmenterHelper(val imageSegmenterListener: ImageSegmenterListener) {
+class ImageSegmenterHelper(val imageSegmenterListener: ImageSegmenterListener,val context: Context) {
 
     private var segmenter: SubjectSegmenter? = null
 
@@ -43,7 +44,7 @@ class ImageSegmenterHelper(val imageSegmenterListener: ImageSegmenterListener) {
                     bitmaps.add(it.bitmap!!)
                 }
             }
-            imageSegmenterListener.onResult(bitmaps = bitmaps.toList())
+            imageSegmenterListener.onResult(bitmaps = bitmaps.toList(), context = context)
         }.addOnFailureListener { e->
             imageSegmenterListener.onError(message = e.message)
         }
@@ -58,6 +59,6 @@ class ImageSegmenterHelper(val imageSegmenterListener: ImageSegmenterListener) {
         fun onInitialized()
         fun onProcessing()
         fun onError(message: String?)
-        fun onResult(bitmaps:List<Bitmap>)
+        fun onResult(bitmaps:List<Bitmap>,context: Context)
     }
 }
