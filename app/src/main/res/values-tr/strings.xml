@@ -22,7 +22,7 @@
     <string name="save_success_text">Başarıyla Kaydettik!</string>
     <string name="save_error_text">Kayıt esnasında bir hata oluştu!</string>
     <string name="cancel_button_text">İptal</string>
-    <string name="open_folder_button_text">Open Saved Images</string>
+    <string name="open_folder_button_text">Kayıtlı Resimleri Göster</string>
     <string name="open_folder_error_text">Klasör açılırken hata oluştu!</string>
     <string name="privacy_policy_dialog_confirm_button_text">Tamam</string>
     <string name="privacy_policy_dialog_title">Gizlilik Şartnamesi</string>
@@ -33,10 +33,14 @@
     <string name="subs_dialog_title">PRO ol, Reklamlar Kalksın!</string>
     <string name="subs_period_weekly_text">Haftalık</string>
     <string name="subs_features_text1">Reklam yok, başağrısı yok</string>
+    <string name="subs_features_text2">İstediğin zaman iptal edebilirsin</string>
     <string name="subs_dialog_confirm_button_text">Detayları Gör</string>
     <string name="subs_dialog_cancel_button_text">İptal</string>
     <string name="feedback_dialog_title">Geri Bildirim Gönder</string>
     <string name="feedback_dialog_textfield_hint">Bildiriminiz..</string>
+    <string name="failed_load_ad_text">Reklam yüklenemedi, tekrar denenecek.</string>
+    <string name="unable_load_ad_text">Reklam yüklenemiyor.</string>
+    <string name="get_pro_button_text">PRO\'ya Geç</string>
     <string name="privacy_policy">**Privacy Policy**\n\n
 
 This privacy policy applies to the Background Eraser app (hereby referred to as "Application") for mobile devices that was created by Samed Harman (hereby referred to as "Service Provider") as an Ad Supported service. This service is intended for use "AS IS".\n\n\n\n

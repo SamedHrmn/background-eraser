@@ -33,10 +33,14 @@
     <string name="subs_dialog_title">Be Premium, Remove Ads!</string>
     <string name="subs_period_weekly_text">Weekly</string>
     <string name="subs_features_text1">No Ads, no headache</string>
+    <string name="subs_features_text2">Cancel whenever you want</string>
     <string name="subs_dialog_confirm_button_text">Show Details</string>
     <string name="subs_dialog_cancel_button_text">Cancel</string>
     <string name="feedback_dialog_title">Send Feedback</string>
     <string name="feedback_dialog_textfield_hint">Your feedback..</string>
+    <string name="failed_load_ad_text">Failed to load ad. That will try again.</string>
+    <string name="unable_load_ad_text">Unable to load ad.</string>
+    <string name="get_pro_button_text">Remove Ads</string>
     <string name="privacy_policy">**Privacy Policy**\n\n
 
 This privacy policy applies to the Background Eraser app (hereby referred to as "Application") for mobile devices that was created by Samed Harman (hereby referred to as "Service Provider") as an Ad Supported service. This service is intended for use "AS IS".\n\n\n\n

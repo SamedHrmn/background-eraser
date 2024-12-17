@@ -54,6 +54,7 @@ fun SubscriptionDialog(onDismiss: () -> Unit, subscriptionViewModel: Subscriptio
     }
 
     AppAlertDialog(
+        modifier = Modifier.padding(horizontal = 12.dp),
         titleText = R.string.subs_dialog_title,
         onDismiss = {
             onDismiss()
@@ -81,7 +82,10 @@ fun SubscriptionDialog(onDismiss: () -> Unit, subscriptionViewModel: Subscriptio
                                     subsPeriodText = localResource.getString(R.string.subs_period_weekly_text),
                                     price = item.price,
                                     currencyCode = item.priceCurrencyCode,
-                                    featureText = localResource.getString(R.string.subs_features_text1)
+                                    features = listOf(
+                                        localResource.getString(R.string.subs_features_text1),
+                                        localResource.getString(R.string.subs_features_text2)
+                                    )
                                 )
                             }
 
@@ -96,7 +100,10 @@ fun SubscriptionDialog(onDismiss: () -> Unit, subscriptionViewModel: Subscriptio
                                         subsPeriodText = localResource.getString(R.string.subs_period_weekly_text),
                                         price = pricePhase.formattedPrice,
                                         currencyCode = pricePhase.priceCurrencyCode,
-                                        featureText = localResource.getString(R.string.subs_features_text1)
+                                        features = listOf(
+                                            localResource.getString(R.string.subs_features_text1),
+                                            localResource.getString(R.string.subs_features_text2)
+                                        )
                                     )
                                 }
                             }
@@ -143,13 +150,13 @@ fun DialogSubsProductCard(
     subsPeriodText: String,
     price: String,
     currencyCode: String,
-    featureText: String
+    features: List<String>
 ) {
     Column {
         Text(
             title,
             style = Typography.bodyLarge.copy(
-                fontSize = 19.sp,
+                fontSize = 16.sp,
                 color = BlackText
             )
         )
@@ -162,13 +169,15 @@ fun DialogSubsProductCard(
             )
         )
         Spacer(Modifier.height(8.dp))
-        Text(
-            "- $featureText",
-            style = Typography.bodyLarge.copy(
-                fontSize = 16.sp,
-                color = BlackText
+        features.map {
+            Text(
+                "- $it",
+                style = Typography.bodyLarge.copy(
+                    fontSize = 16.sp,
+                    color = BlackText
+                )
             )
-        )
+        }
     }
 }
 
@@ -249,7 +258,7 @@ fun PreviewSubscriptionDialog() {
                             subsPeriodText = "Weekly",
                             price = "0.99",
                             currencyCode = "$",
-                            featureText = "No Ads, no headache"
+                            features = listOf("Feature text1", "Feature text2")
                         )
                     }
                 }

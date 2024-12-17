@@ -1,5 +1,6 @@
 package com.imagetool.bgremover.common.ui
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.runtime.Composable
@@ -15,10 +16,12 @@ fun AppElevatedButton(
     modifier: Modifier = Modifier,
     borderColor: Color? = null,
     onClick: () -> Unit,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp),
     content: @Composable () -> Unit
 ) {
     ElevatedButton(
         modifier = modifier,
+        contentPadding = contentPadding,
         colors = ButtonDefaults.elevatedButtonColors().copy(containerColor = WhiteText),
         elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 4.dp),
         border = ButtonDefaults.outlinedButtonBorder(enabled = true).copy(

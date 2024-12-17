@@ -1,48 +1,38 @@
 package com.imagetool.bgremover.features.subscription.ui
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.imagetool.bgremover.R
-import com.imagetool.bgremover.features.subscription.SubscriptionViewModel
-import com.imagetool.bgremover.theme.Typography
 import com.imagetool.bgremover.common.provider.LocalResources
-import com.imagetool.bgremover.common.ui.AppElevatedButton
+import com.imagetool.bgremover.theme.Typography
 
 @Composable
-fun GetPremiumButton(subscriptionViewModel: SubscriptionViewModel) {
-
-    val showSubscriptionDialogState = remember {
-        mutableStateOf(false)
-    }
-
-    val localResource = LocalResources.current
-
-    AppElevatedButton(
-        modifier = Modifier.padding(horizontal = 4.dp),
-        onClick = {
-            showSubscriptionDialogState.value = true
-        }
+fun ProCard() {
+    Box(
+        modifier = Modifier.background(
+            color = Color.White,
+            shape = RoundedCornerShape(12.dp)
+        )
     ) {
         Row(
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.padding(horizontal = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 ResourcesCompat.getDrawable(
@@ -56,19 +46,7 @@ fun GetPremiumButton(subscriptionViewModel: SubscriptionViewModel) {
                 tint = Color.Unspecified,
             )
             Spacer(Modifier.width(4.dp))
-            Text(
-                localResource.getString(R.string.get_pro_button_text),
-                style = Typography.titleLarge.copy(fontSize = 13.sp)
-            )
+            Text("PRO", style = Typography.titleSmall)
         }
-    }
-
-    if (showSubscriptionDialogState.value) {
-        SubscriptionDialog(
-            onDismiss = {
-                showSubscriptionDialogState.value = false
-            },
-            subscriptionViewModel = subscriptionViewModel,
-        )
     }
 }

@@ -59,10 +59,14 @@ class SubscriptionViewModel : ViewModel(), PurchasesUpdatedListener {
             }
 
             is ProductDetails -> {
+
+                val offerToken = paramDetail.subscriptionOfferDetails?.get(0)?.offerToken ?: return
+
                 BillingFlowParams.newBuilder()
                     .setProductDetailsParamsList(
                         listOf(
                             ProductDetailsParams.newBuilder()
+                                .setOfferToken(offerToken)
                                 .setProductDetails(paramDetail).build()
                         )
                     ).build()
