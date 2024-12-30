@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,18 +28,19 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.SkuDetails
-import com.imagetool.bgremover.features.subscription.ProductStates
 import com.imagetool.bgremover.R
-import com.imagetool.bgremover.features.subscription.SubscriptionViewModel
+import com.imagetool.bgremover.common.provider.LocalResources
 import com.imagetool.bgremover.common.ui.AppElevatedButton
+import com.imagetool.bgremover.common.ui.AppText
+import com.imagetool.bgremover.common.ui.dialogs.AppAlertDialog
+import com.imagetool.bgremover.features.subscription.ProductStates
+import com.imagetool.bgremover.features.subscription.SubscriptionViewModel
 import com.imagetool.bgremover.theme.BlackText
 import com.imagetool.bgremover.theme.Diamond
 import com.imagetool.bgremover.theme.ErrorRed
 import com.imagetool.bgremover.theme.Green1
 import com.imagetool.bgremover.theme.ImagetoolbackgroundremoverTheme
 import com.imagetool.bgremover.theme.Typography
-import com.imagetool.bgremover.common.provider.LocalResources
-import com.imagetool.bgremover.common.ui.dialogs.AppAlertDialog
 
 @Composable
 fun SubscriptionDialog(onDismiss: () -> Unit, subscriptionViewModel: SubscriptionViewModel) {
@@ -67,13 +67,13 @@ fun SubscriptionDialog(onDismiss: () -> Unit, subscriptionViewModel: Subscriptio
                 }
 
                 is ProductStates.Error -> {
-                    Text(localResource.getString(R.string.subs_dialog_products_query_error))
+                    AppText(localResource.getString(R.string.subs_dialog_products_query_error))
                 }
 
                 is ProductStates.Loaded<*> -> {
 
                     if (productsState.products.isEmpty()) {
-                        Text(localResource.getString(R.string.subs_dialog_no_product_text))
+                        AppText(localResource.getString(R.string.subs_dialog_no_product_text))
                     } else {
                         when (val item = productsState.products.first()) {
                             is SkuDetails -> {
@@ -122,12 +122,12 @@ fun SubscriptionDialog(onDismiss: () -> Unit, subscriptionViewModel: Subscriptio
                         AppElevatedButton(borderColor = ErrorRed, onClick = {
                             onDismiss()
                         }) {
-                            Text(localResource.getString(R.string.subs_dialog_cancel_button_text))
+                            AppText(localResource.getString(R.string.subs_dialog_cancel_button_text))
                         }
                         AppElevatedButton(onClick = {
                             subscriptionViewModel.launchBillingFlow(activity = localActivity)
                         }) {
-                            Text(localResource.getString(R.string.subs_dialog_confirm_button_text))
+                            AppText(localResource.getString(R.string.subs_dialog_confirm_button_text))
                         }
                     }
                 } else {
@@ -135,7 +135,7 @@ fun SubscriptionDialog(onDismiss: () -> Unit, subscriptionViewModel: Subscriptio
                         AppElevatedButton(borderColor = ErrorRed, onClick = {
                             onDismiss()
                         }) {
-                            Text(localResource.getString(R.string.subs_dialog_cancel_button_text))
+                            AppText(localResource.getString(R.string.subs_dialog_cancel_button_text))
                         }
                     }
                 }
@@ -153,7 +153,7 @@ fun DialogSubsProductCard(
     features: List<String>
 ) {
     Column {
-        Text(
+        AppText(
             title,
             style = Typography.bodyLarge.copy(
                 fontSize = 16.sp,
@@ -161,7 +161,7 @@ fun DialogSubsProductCard(
             )
         )
         Spacer(Modifier.height(4.dp))
-        Text(
+        AppText(
             "$subsPeriodText ${price}${currencyCode}",
             style = Typography.bodyLarge.copy(
                 fontSize = 16.sp,
@@ -170,7 +170,7 @@ fun DialogSubsProductCard(
         )
         Spacer(Modifier.height(8.dp))
         features.map {
-            Text(
+            AppText(
                 "- $it",
                 style = Typography.bodyLarge.copy(
                     fontSize = 16.sp,
@@ -201,7 +201,7 @@ fun PreviewSubscriptionDialog() {
                     usePlatformDefaultWidth = false,
                 ),
                 title = {
-                    Text("Be Pro, Remove Ads!")
+                    AppText("Be Pro, Remove Ads!")
                 },
                 confirmButton = {
                     if (!showNoProductState) {
@@ -213,12 +213,12 @@ fun PreviewSubscriptionDialog() {
                             AppElevatedButton(borderColor = ErrorRed, onClick = {
 
                             }) {
-                                Text("Cancel")
+                                AppText("Cancel")
                             }
                             AppElevatedButton(onClick = {
 
                             }) {
-                                Text("Show Details")
+                                AppText("Show Details")
                             }
                         }
                     } else {
@@ -229,7 +229,7 @@ fun PreviewSubscriptionDialog() {
                             AppElevatedButton(borderColor = ErrorRed, onClick = {
 
                             }) {
-                                Text("Cancel")
+                                AppText("Cancel")
                             }
                         }
                     }

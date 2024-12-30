@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.imagetool.bgremover.R
 import com.imagetool.bgremover.common.provider.LocalResources
 import com.imagetool.bgremover.common.ui.AppElevatedButton
+import com.imagetool.bgremover.common.ui.AppText
 import com.imagetool.bgremover.features.erase.BackgroundEraserViewModel
 import com.imagetool.bgremover.theme.ErrorRed
 import com.imagetool.bgremover.util.animatePlacement
@@ -75,26 +75,26 @@ fun SegmentedImagesBottomSheet(
                     AppElevatedButton(
                         modifier = Modifier.animatePlacement(),
                         onClick = {
-                            val isSuccess = backgroundEraserViewModel.saveSelectedImages(
-                                context = localContext,
-                                localResources = localResource,
-                                bitmaps = selectedImagesState.toList()
-                            )
-
-                            if (isSuccess) {
-                                localContext.showToast(text = localResource.getString(R.string.save_success_text))
-                            } else {
-                                localContext.showToast(text = localResource.getString(R.string.save_error_text))
-                            }
-
                             coroutineScopeState.launch {
+                                val isSuccess = backgroundEraserViewModel.saveSelectedImages(
+                                    context = localContext,
+                                    localResources = localResource,
+                                    bitmaps = selectedImagesState.toList()
+                                )
+
+                                if (isSuccess) {
+                                    localContext.showToast(text = localResource.getString(R.string.save_success_text))
+                                } else {
+                                    localContext.showToast(text = localResource.getString(R.string.save_error_text))
+                                }
+
                                 sheetState.hide()
                             }
 
                             onSave()
 
                         }) {
-                        Text(localResource.getString(R.string.save_button_text))
+                        AppText(localResource.getString(R.string.save_button_text))
                     }
                 }
                 AppElevatedButton(
@@ -111,7 +111,7 @@ fun SegmentedImagesBottomSheet(
                         onCancelClick()
                     },
                 ) {
-                    Text(localResource.getString(R.string.cancel_button_text))
+                    AppText(localResource.getString(R.string.cancel_button_text))
                 }
             }
         }

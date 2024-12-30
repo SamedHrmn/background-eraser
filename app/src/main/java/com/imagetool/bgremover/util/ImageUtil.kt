@@ -25,9 +25,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-object ImageUtil {
+class ImageUtil {
 
-    private const val SAVED_IMAGE_DIR_PATH = "Pictures/"
+    companion object{
+        private const val SAVED_IMAGE_DIR_PATH = "Pictures/"
+    }
 
     fun uriToBitmap(
         uri: Uri,

@@ -22,7 +22,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -41,9 +40,11 @@ import androidx.compose.ui.window.DialogProperties
 import com.imagetool.bgremover.R
 import com.imagetool.bgremover.common.provider.LocalResources
 import com.imagetool.bgremover.common.ui.AppElevatedButton
+import com.imagetool.bgremover.common.ui.AppText
 import com.imagetool.bgremover.features.feedback.FeedbackViewModel
 import com.imagetool.bgremover.theme.BlackText
 import com.imagetool.bgremover.theme.Green1
+import com.imagetool.bgremover.theme.Typography
 import com.imagetool.bgremover.theme.WhiteText
 import com.imagetool.bgremover.util.showToast
 import org.koin.androidx.compose.koinViewModel
@@ -79,7 +80,7 @@ fun SendFeedbackDialog(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(localResource.getString(R.string.feedback_dialog_title))
+                AppText(localResource.getString(R.string.feedback_dialog_title))
                 CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
                     IconButton(
                         modifier = Modifier
@@ -122,9 +123,9 @@ fun SendFeedbackDialog(
                 shape = RoundedCornerShape(12.dp),
                 value = text.value,
                 label = {
-                    Text(
+                    AppText(
                         localResource.getString(R.string.feedback_dialog_textfield_hint),
-                        color = Color.Gray
+                        style = Typography.titleLarge.copy(Color.Gray)
                     )
                 },
                 maxLines = 5,
@@ -150,9 +151,8 @@ fun SendFeedbackDialog(
                             })
                     }
                 ) {
-                    Text(
+                    AppText(
                         text = localResource.getString(R.string.feedback_dialog_send_feedback_button_text),
-                        color = BlackText,
                     )
                 }
             }

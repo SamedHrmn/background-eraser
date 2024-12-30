@@ -76,7 +76,7 @@ fun MyApp(
                         Box(
                             modifier = Modifier.height(
                                 LocalConfiguration.current.screenHeightDp.dp.times(
-                                    0.5f
+                                    0.6f
                                 )
                             )
                         ) {

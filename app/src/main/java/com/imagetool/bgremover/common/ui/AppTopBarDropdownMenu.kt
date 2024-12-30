@@ -3,7 +3,6 @@ package com.imagetool.bgremover.common.ui
 import android.content.res.Resources
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -117,7 +116,7 @@ fun AppTopBarDropdownMenuItem(
     }
 
     DropdownMenuItem(
-        text = { Text(menu.toLocalizedText(resources = LocalResources.current)) },
+        text = { AppText(menu.toLocalizedText(resources = LocalResources.current)) },
         onClick = {
             selectedMenuItemIndex.value = AppTopBarDropdownMenus.entries.indexOf(menu)
             onItemSelected(AppTopBarDropdownMenus.entries.elementAt(selectedMenuItemIndex.value!!))
