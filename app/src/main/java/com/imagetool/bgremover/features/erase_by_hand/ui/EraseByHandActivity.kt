@@ -17,7 +17,6 @@ import com.imagetool.bgremover.util.IntentKeys
 import com.imagetool.bgremover.util.IntentUtil
 import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import org.koin.core.Koin
 
 class EraseByHandActivity : ComponentActivity() {
 

@@ -1,6 +1,7 @@
 package com.imagetool.bgremover.features.erase_by_hand
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BlendMode
@@ -120,7 +121,6 @@ class EraseByHandViewModel(
             imageUtil.uriToBitmap(
                 uri = uri,
                 context = context,
-                scope = viewModelScope,
                 onSuccess = { bitmap ->
                     _pickedImageState.value = bitmap
                 },
@@ -141,7 +141,11 @@ class EraseByHandViewModel(
     }
 
     fun navigateMainActivity(context: Context) {
-        IntentUtil.intent(context = context, dest = MainActivity::class.java, shouldClear = true)
+        IntentUtil.intent(
+            context = context,
+            dest = MainActivity::class.java,
+            flags = listOf(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)

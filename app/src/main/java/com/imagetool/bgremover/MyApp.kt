@@ -1,6 +1,8 @@
 package com.imagetool.bgremover
 
 import android.app.Activity
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,6 +35,7 @@ import com.imagetool.bgremover.features.subscription.SubscriptionViewModel
 import com.imagetool.bgremover.theme.ImagetoolbackgroundremoverTheme
 import org.koin.androidx.compose.koinViewModel
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun MyApp(
     subscriptionViewModel: SubscriptionViewModel = koinViewModel(),

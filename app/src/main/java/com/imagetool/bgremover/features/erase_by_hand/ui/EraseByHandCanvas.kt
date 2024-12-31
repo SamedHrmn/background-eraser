@@ -118,7 +118,10 @@ fun EraseByHandCanvasContent(modifier: Modifier=Modifier,eraseByHandViewModel: E
             }) {
             val currentBitmap =
                 drawingByHandState.value.tempBitmap
-                    ?: bitmap.value?.copy(Bitmap.Config.ARGB_8888, true)
+                    ?: bitmap.value?.copy(Bitmap.Config.ARGB_8888, true)?.apply {
+                        isPremultiplied = true
+                        setHasAlpha(true)
+                    }
 
             currentBitmap?.let { baseBitmap ->
                 val outputBitmap = Bitmap.createScaledBitmap(

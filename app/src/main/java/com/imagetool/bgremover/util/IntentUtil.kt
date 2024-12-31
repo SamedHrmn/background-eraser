@@ -10,18 +10,21 @@ enum class IntentKeys {
 
 object IntentUtil {
 
-    fun intent(context: Context, dest: Class<*>,shouldClear:Boolean=false){
+    fun intent(context: Context, dest: Class<*>,flags:List<Int>){
         val intent = Intent(context,dest).apply {
-            if(shouldClear){
-               addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            }
+             flags.forEach {
+                 addFlags(it)
+             }
         }
 
         context.startActivity(intent)
     }
 
-    fun <T> intentWithArgs(context: Context, dest: Class<*>, argKey: IntentKeys, arg: T) {
+    fun <T> intentWithArgs(context: Context, dest: Class<*>, argKey: IntentKeys, arg: T,flags: List<Int>) {
         val intent = Intent(context, dest).apply {
+            flags.forEach {
+                addFlags(it)
+            }
             when (arg) {
                 is String -> putExtra(argKey.name, arg)
                 else -> {
