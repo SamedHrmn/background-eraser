@@ -3,6 +3,8 @@ package com.imagetool.bgremover.features.erase_by_hand.ui
 import android.graphics.Bitmap
 import android.graphics.BlendMode
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
@@ -66,7 +68,10 @@ fun EraseByHandCanvas() {
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
-fun EraseByHandCanvasContent(modifier: Modifier=Modifier,eraseByHandViewModel: EraseByHandViewModel = koinViewModel()){
+fun EraseByHandCanvasContent(
+    modifier: Modifier = Modifier,
+    eraseByHandViewModel: EraseByHandViewModel = koinViewModel()
+) {
 
     val drawingByHandState = eraseByHandViewModel.drawingByHandState.collectAsState()
     val bitmap = eraseByHandViewModel.pickedImage.collectAsState()
@@ -79,6 +84,7 @@ fun EraseByHandCanvasContent(modifier: Modifier=Modifier,eraseByHandViewModel: E
                 style = Paint.Style.STROKE
                 strokeWidth = drawingByHandState.value.eraseBrushSize
                 blendMode = BlendMode.CLEAR
+                xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
             }
         }
     }
@@ -148,7 +154,7 @@ fun EraseByHandCanvasContent(modifier: Modifier=Modifier,eraseByHandViewModel: E
 }
 
 @Composable
-fun EraseByHandCanvasBottomToolbar(eraseByHandViewModel: EraseByHandViewModel = koinViewModel()){
+fun EraseByHandCanvasBottomToolbar(eraseByHandViewModel: EraseByHandViewModel = koinViewModel()) {
 
     val localContext = LocalContext.current
     val localResource = LocalResources.current
@@ -194,7 +200,7 @@ fun EraseByHandCanvasBottomToolbar(eraseByHandViewModel: EraseByHandViewModel = 
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
-fun EraseByHandCanvasActionToolbar(eraseByHandViewModel: EraseByHandViewModel = koinViewModel()){
+fun EraseByHandCanvasActionToolbar(eraseByHandViewModel: EraseByHandViewModel = koinViewModel()) {
 
     val drawingByHandState = eraseByHandViewModel.drawingByHandState.collectAsState()
     val localResource = LocalResources.current

@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -73,7 +74,7 @@ fun SegmentedImagesBottomSheet(
             ) {
                 AnimatedVisibility(visible = hasSelectedItemState.value) {
                     AppElevatedButton(
-                        modifier = Modifier.animatePlacement(),
+                        modifier = Modifier.animatePlacement().defaultMinSize(minWidth = 100.dp),
                         onClick = {
                             coroutineScopeState.launch {
                                 val isSuccess = backgroundEraserViewModel.saveSelectedImages(
@@ -98,7 +99,7 @@ fun SegmentedImagesBottomSheet(
                     }
                 }
                 AppElevatedButton(
-                    modifier = Modifier.animatePlacement(),
+                    modifier = Modifier.animatePlacement().defaultMinSize(minWidth = 100.dp),
                     borderColor = ErrorRed,
                     onClick = {
                         coroutineScopeState.launch {

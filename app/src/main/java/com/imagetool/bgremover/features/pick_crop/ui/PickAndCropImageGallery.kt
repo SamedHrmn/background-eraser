@@ -1,10 +1,13 @@
 package com.imagetool.bgremover.features.pick_crop.ui
 
+import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
@@ -37,6 +40,8 @@ fun PickAndCropImageGallery(
             uri = uri, cropImageOptions = CropImageOptions(
                 cropMenuCropButtonTitle = localResources.getText(cropMenuCropButtonTitle),
                 toolbarColor = cropActivityToolbarColor,
+                backgroundColor = Color.Transparent.toArgb(),
+                outputCompressFormat = Bitmap.CompressFormat.PNG
             )
         )
         imageCropLauncher.launch(cropOption)

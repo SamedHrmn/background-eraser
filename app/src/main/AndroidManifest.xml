@@ -93,6 +93,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/Theme.App.Starting"
