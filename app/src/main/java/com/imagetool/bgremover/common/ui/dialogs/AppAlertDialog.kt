@@ -5,13 +5,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.DialogProperties
 import com.imagetool.bgremover.common.provider.LocalResources
+import com.imagetool.bgremover.common.ui.AppText
 
 @Composable
 fun AppAlertDialog(
@@ -51,18 +51,18 @@ fun AppAlertDialog(
                         showDialogState.value = false
                         onDismiss()
                     }) {
-                        Text(localResources.getString(confirmButtonText))
+                        AppText(localResources.getString(confirmButtonText))
                     }
                 }
             }
         },
         title = {
-            Text(localResources.getString(titleText))
+            AppText(localResources.getString(titleText))
         },
         text = {
             when {
                 content != null -> content()
-                contentText != null -> Text(
+                contentText != null -> AppText(
                     localResources.getString(contentText),
                     modifier = Modifier.verticalScroll(state = scrollState)
                 )

@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -14,10 +13,8 @@ import coil3.request.ImageRequest
 import coil3.request.SuccessResult
 import coil3.toBitmap
 import com.imagetool.bgremover.R
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -25,34 +22,32 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-object ImageUtil {
+class ImageUtil {
 
-    private const val SAVED_IMAGE_DIR_PATH = "Pictures/"
+    companion object{
+        private const val SAVED_IMAGE_DIR_PATH = "Pictures/"
+    }
 
-    fun uriToBitmap(
+    suspend fun uriToBitmap(
         uri: Uri,
         context: Context,
-        scope: CoroutineScope,
         onSuccess: (bitmap: Bitmap) -> Unit
     ) {
-        var bitmap: Bitmap? = null
+        val loader = ImageLoader(context)
+        val request = ImageRequest.Builder(context).data(uri).build()
 
-        val loadBitmap = scope.launch(Dispatchers.IO) {
-            val loader = ImageLoader(context)
-            val request = ImageRequest.Builder(context).data(uri).build()
-            val result = loader.execute(request)
-            if (result is SuccessResult) {
-                bitmap = result.image.toBitmap()
-            } else if (result is ErrorResult) {
-                cancel(result.throwable.localizedMessage ?: "ErrorResult", result.throwable)
+        val result = withContext(Dispatchers.IO) {
+            val response = loader.execute(request)
+            if (response is SuccessResult) {
+                response.image.toBitmap()
+            } else if (response is ErrorResult) {
+                throw response.throwable
+            } else {
+                throw Exception("Unknown error while loading image")
             }
         }
 
-        loadBitmap.invokeOnCompletion {
-            bitmap?.let {
-                onSuccess(it)
-            }
-        }
+        onSuccess(result)
     }
 
     fun saveBitmapsAsPngToGallery(

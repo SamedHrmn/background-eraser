@@ -5,11 +5,10 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.imagetool.bgremover.common.use_cases.SaveImageUseCase
 import com.imagetool.bgremover.features.erase.data.BackgroundEraserResultState
 import com.imagetool.bgremover.features.pick_crop.PickCropViewModel
 import com.imagetool.bgremover.util.DataStoreHelper
-import com.imagetool.bgremover.util.ImageUtil
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -17,12 +16,13 @@ import kotlinx.coroutines.launch
 class BackgroundEraserViewModel(
     private val pickCropViewModel: PickCropViewModel,
     private val backgroundEraserHelper: BackgroundEraserHelper,
+    private val saveImageUseCase: SaveImageUseCase,
 ) : ViewModel(),
     BackgroundEraserHelper.BackgroundEraserResultListener {
 
-        init {
-            backgroundEraserHelper.setListener(this)
-        }
+    init {
+        backgroundEraserHelper.setListener(this)
+    }
 
     private val _backgroundEraserResultState =
         MutableStateFlow<BackgroundEraserResultState>(BackgroundEraserResultState.NotReady)
@@ -65,26 +65,16 @@ class BackgroundEraserViewModel(
         }
     }
 
-    fun saveSelectedImages(
+    suspend fun saveSelectedImages(
         context: Context,
         localResources: Resources,
         bitmaps: List<Bitmap>
     ): Boolean {
-        if (bitmaps.isEmpty()) return false
-
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                ImageUtil.saveBitmapsAsPngToGallery(
-                    context = context,
-                    localResources = localResources,
-                    bitmaps = bitmaps
-                )
-            }
-            return true
-        } catch (e: Exception) {
-            return false
-        }
-
+        return saveImageUseCase.execute(
+            context = context,
+            localResources = localResources,
+            bitmaps = bitmaps
+        )
     }
 
     override fun onInitialized() {

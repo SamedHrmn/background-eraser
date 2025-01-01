@@ -65,6 +65,7 @@
 
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -92,6 +93,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/Theme.App.Starting"
@@ -106,6 +108,10 @@
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
+
+        <activity android:name=".features.erase_by_hand.ui.EraseByHandActivity"
+            android:theme="@style/Base.Theme.AppCompat">
+        </activity>
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"

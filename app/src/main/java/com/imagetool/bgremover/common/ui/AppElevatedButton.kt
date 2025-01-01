@@ -17,24 +17,34 @@ fun AppElevatedButton(
     borderColor: Color? = null,
     onClick: () -> Unit,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp),
+    enabled: Boolean = true,
     content: @Composable () -> Unit
 ) {
+
+    val _borderColor = when {
+        !enabled -> listOf(Color.LightGray, Color.LightGray)
+        borderColor != null -> listOf(borderColor, borderColor)
+        else -> listOf(
+            Green1, Green1
+        )
+
+    }
+
     ElevatedButton(
         modifier = modifier,
         contentPadding = contentPadding,
-        colors = ButtonDefaults.elevatedButtonColors().copy(containerColor = WhiteText),
+        colors = ButtonDefaults.elevatedButtonColors()
+            .copy(containerColor = if (enabled) WhiteText else Color.LightGray.copy(alpha = 0.1f)),
         elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 4.dp),
-        border = ButtonDefaults.outlinedButtonBorder(enabled = true).copy(
+        border = ButtonDefaults.outlinedButtonBorder(enabled = enabled).copy(
             width = 2.dp, brush = Brush.linearGradient(
-                colors = if (borderColor != null) listOf(borderColor, borderColor) else listOf(
-                    Green1, Green1
-                )
+                colors = _borderColor,
             )
         ),
         onClick = {
             onClick()
 
         }) {
-        content()
+         content()
     }
 }

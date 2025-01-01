@@ -22,7 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil3.compose.SubcomposeAsyncImage
+import com.imagetool.bgremover.common.ui.AppTransparentImage
 import com.imagetool.bgremover.theme.BlackText
 import com.imagetool.bgremover.theme.Green1
 
@@ -43,7 +43,7 @@ fun SelectableImageListView(
         itemsIndexed(images) { index, image ->
 
             Box {
-                SubcomposeAsyncImage(
+                AppTransparentImage(
                     modifier = Modifier
                         .width(160.dp)
                         .border(
@@ -65,8 +65,7 @@ fun SelectableImageListView(
                             }
                             onItemsSelected(selectedImagesIndexState.toList())
                         },
-                    model = image,
-                    contentDescription = "",
+                    bitmap = image,
                     contentScale = ContentScale.Fit,
                 )
                 Checkbox(

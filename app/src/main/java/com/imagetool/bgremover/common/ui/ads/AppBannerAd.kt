@@ -3,7 +3,6 @@ package com.imagetool.bgremover.common.ui.ads
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
@@ -19,6 +18,7 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.imagetool.bgremover.R
 import com.imagetool.bgremover.common.provider.LocalResources
+import com.imagetool.bgremover.common.ui.AppText
 
 @Composable
 fun AppBannerAd(modifier: Modifier = Modifier, adUnitId: String, maxRetryCountOnError: Int = 3) {
@@ -76,11 +76,11 @@ fun AppBannerAd(modifier: Modifier = Modifier, adUnitId: String, maxRetryCountOn
                 }
 
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = localResource.getString(R.string.failed_load_ad_text))
+                    AppText(text = localResource.getString(R.string.failed_load_ad_text))
                 }
             } else {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(
+                    AppText(
                         text = localResource.getString(R.string.unable_load_ad_text),
                     )
                 }
