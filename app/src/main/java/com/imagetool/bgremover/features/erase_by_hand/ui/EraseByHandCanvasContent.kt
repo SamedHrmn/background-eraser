@@ -51,6 +51,34 @@ fun EraseByHandCanvasContent(
         }
     }
 
+    val scaledBitmap = remember {
+        derivedStateOf {
+            val currentBitmap =
+                drawingByHandState.value.tempBitmap
+                    ?: bitmap.value?.copy(Bitmap.Config.ARGB_8888, true)?.apply {
+                        isPremultiplied = true
+                        setHasAlpha(true)
+                    }
+
+            currentBitmap?.let {
+                if (it.width != drawingByHandState.value.canvasSize.width &&
+                    it.height != drawingByHandState.value.canvasSize.height &&
+                    drawingByHandState.value.lastAction is DrawingByHandAction.OnPathEnd
+
+                ) {
+                    return@derivedStateOf Bitmap.createScaledBitmap(
+                        it,
+                        drawingByHandState.value.canvasSize.width,
+                        drawingByHandState.value.canvasSize.height,
+                        false,
+                    )
+                } else {
+                    return@derivedStateOf it
+                }
+            }
+        }
+    }
+
     Box(
         modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.TopCenter,
@@ -84,33 +112,23 @@ fun EraseByHandCanvasContent(
                     }
                 )
             }) {
-            val currentBitmap =
-                drawingByHandState.value.tempBitmap
-                    ?: bitmap.value?.copy(Bitmap.Config.ARGB_8888, true)?.apply {
-                        isPremultiplied = true
-                        setHasAlpha(true)
-                    }
+            if (scaledBitmap.value == null) return@Canvas
 
-            currentBitmap?.let { baseBitmap ->
-                val outputBitmap = Bitmap.createScaledBitmap(
-                    baseBitmap,
-                    size.width.toInt(),
-                    size.height.toInt(),
-                    false,
-                )
-                val combinedCanvas = android.graphics.Canvas(outputBitmap)
+            val currentBitmap = scaledBitmap.value!!
 
-                combinedCanvas.drawPath(
-                    drawingByHandState.value.currentPath.asAndroidPath(),
-                    paint.value,
-                )
+            val combinedCanvas = android.graphics.Canvas(currentBitmap)
 
-                eraseByHandViewModel.setTempBitmap(outputBitmap)
+            combinedCanvas.drawPath(
+                drawingByHandState.value.currentPath.asAndroidPath(),
+                paint.value,
+            )
 
-                drawImage(
-                    image = outputBitmap.asImageBitmap(),
-                )
-            }
+            eraseByHandViewModel.setTempBitmap(currentBitmap)
+
+            drawImage(
+                image = currentBitmap.asImageBitmap(),
+            )
+
         }
     }
 }

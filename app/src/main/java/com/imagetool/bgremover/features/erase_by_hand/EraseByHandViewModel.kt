@@ -58,32 +58,44 @@ class EraseByHandViewModel(
         when (action) {
             is DrawingByHandAction.OnNewPathDraw -> {
                 action.offset?.let {
-                    _drawingByHandState.value =
-                        _drawingByHandState.value.copy(currentPath = Path().apply {
-                            moveTo(
-                                x = it.x,
-                                y = it.y
-                            )
-                        })
+                    _drawingByHandState.update { state ->
+                        state.copy(
+                            lastAction = action,
+                            currentPath = Path().apply {
+                                moveTo(
+                                    x = it.x,
+                                    y = it.y
+                                )
+                            },
+                        )
+                    }
+
                 }
             }
 
             is DrawingByHandAction.OnDraw -> {
                 action.offset?.let {
+                    _drawingByHandState.update { state ->
+                        state.copy(lastAction = action)
+                    }
                     _drawingByHandState.value.currentPath.lineTo(x = it.x, y = it.y)
                 }
             }
 
             is DrawingByHandAction.OnClear -> {
                 _drawingByHandState.value =
-                    DrawingByHandState(canvasSize = drawingByHandState.value.canvasSize)
+                    DrawingByHandState(
+                        canvasSize = drawingByHandState.value.canvasSize,
+                        lastAction = action,
+                    )
                 setTempBitmap(recreateDrawedBitmap())
             }
 
             is DrawingByHandAction.OnPathEnd -> {
                 _drawingByHandState.value = _drawingByHandState.value.copy(
                     undoStack = (_drawingByHandState.value.undoStack + _drawingByHandState.value.currentPath).toList(),
-                    currentPath = Path()
+                    currentPath = Path(),
+                    lastAction = action,
                 )
             }
 
@@ -94,6 +106,7 @@ class EraseByHandViewModel(
                 _drawingByHandState.value = _drawingByHandState.value.copy(
                     undoStack = _drawingByHandState.value.undoStack.dropLast(1).toList(),
                     redoStack = (_drawingByHandState.value.redoStack + lastItem).toList(),
+                    lastAction = action,
                 )
 
                 setTempBitmap(recreateDrawedBitmap())
@@ -107,7 +120,8 @@ class EraseByHandViewModel(
 
                 _drawingByHandState.value = _drawingByHandState.value.copy(
                     redoStack = _drawingByHandState.value.redoStack.dropLast(1).toList(),
-                    undoStack = (_drawingByHandState.value.undoStack + lastItem).toList()
+                    undoStack = (_drawingByHandState.value.undoStack + lastItem).toList(),
+                    lastAction = action,
                 )
                 setTempBitmap(recreateDrawedBitmap())
             }
@@ -191,6 +205,7 @@ data class DrawingByHandState(
     val tempBitmap: Bitmap? = null,
     val eraseBrushSize: Float = 32f,
     val canvasSize: IntSize = IntSize.Zero,
+    val lastAction: DrawingByHandAction? = null,
 )
 
 sealed interface DrawingByHandAction {
