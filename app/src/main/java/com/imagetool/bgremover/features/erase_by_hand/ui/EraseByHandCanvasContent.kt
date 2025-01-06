@@ -1,10 +1,6 @@
 package com.imagetool.bgremover.features.erase_by_hand.ui
 
 import android.graphics.Bitmap
-import android.graphics.BlendMode
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
@@ -13,19 +9,22 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asAndroidPath
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onPlaced
 import com.imagetool.bgremover.features.erase_by_hand.DrawingByHandAction
 import com.imagetool.bgremover.features.erase_by_hand.EraseByHandViewModel
+import com.imagetool.bgremover.util.scaledBitmapIfNeeded
 import org.koin.androidx.compose.koinViewModel
 
 @RequiresApi(Build.VERSION_CODES.Q)
@@ -37,16 +36,30 @@ fun EraseByHandCanvasContent(
 
     val drawingByHandState = eraseByHandViewModel.drawingByHandState.collectAsState()
     val bitmap = eraseByHandViewModel.pickedImage.collectAsState()
+    val canvasIsReady = remember { mutableStateOf(false) }
+
+    LaunchedEffect(
+        canvasIsReady.value,
+        drawingByHandState.value.tempBitmap,
+        drawingByHandState.value.canvasSize
+    ) {
+        drawingByHandState.value.tempBitmap?.let {
+            eraseByHandViewModel.setTempBitmap(
+                it.scaledBitmapIfNeeded(drawingByHandState.value.canvasSize)
+            )
+        }
+
+    }
+
 
     val paint = remember {
         derivedStateOf {
             Paint().apply {
-                isAntiAlias = true
-                color = Color.Transparent.toArgb()
-                style = Paint.Style.STROKE
+                color = Color.Transparent
+                style = PaintingStyle.Stroke
                 strokeWidth = drawingByHandState.value.eraseBrushSize
-                blendMode = BlendMode.CLEAR
-                xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+                blendMode = androidx.compose.ui.graphics.BlendMode.Clear
+
             }
         }
     }
@@ -66,12 +79,7 @@ fun EraseByHandCanvasContent(
                     drawingByHandState.value.lastAction is DrawingByHandAction.OnPathEnd
 
                 ) {
-                    return@derivedStateOf Bitmap.createScaledBitmap(
-                        it,
-                        drawingByHandState.value.canvasSize.width,
-                        drawingByHandState.value.canvasSize.height,
-                        false,
-                    )
+                    return@derivedStateOf it.scaledBitmapIfNeeded(drawingByHandState.value.canvasSize)
                 } else {
                     return@derivedStateOf it
                 }
@@ -87,6 +95,7 @@ fun EraseByHandCanvasContent(
             .fillMaxSize()
             .onPlaced { layoutCoordinates ->
                 eraseByHandViewModel.setCanvasSize(layoutCoordinates.size)
+                canvasIsReady.value = true
             }
             .pointerInput(Unit) {
                 detectDragGestures(
@@ -116,10 +125,10 @@ fun EraseByHandCanvasContent(
 
             val currentBitmap = scaledBitmap.value!!
 
-            val combinedCanvas = android.graphics.Canvas(currentBitmap)
+            val combinedCanvas = androidx.compose.ui.graphics.Canvas(currentBitmap.asImageBitmap())
 
             combinedCanvas.drawPath(
-                drawingByHandState.value.currentPath.asAndroidPath(),
+                drawingByHandState.value.currentPath,
                 paint.value,
             )
 

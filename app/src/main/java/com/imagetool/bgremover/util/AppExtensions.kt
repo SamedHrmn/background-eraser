@@ -2,6 +2,7 @@ package com.imagetool.bgremover.util
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
@@ -21,12 +22,23 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.round
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
+
+fun IntSize.sizeIsEqual(size:IntSize?):Boolean{
+    return width == size?.width && height == size.height
+}
+
+fun Bitmap?.scaledBitmapIfNeeded(targetSize:IntSize):Bitmap?{
+    if(this == null) return null
+    if(targetSize.sizeIsEqual(IntSize(this.width,this.height))) return this
+    return Bitmap.createScaledBitmap(this,targetSize.width,targetSize.height,false)
+}
 
 fun Context.openAppSettings() {
     val intent = Intent(
