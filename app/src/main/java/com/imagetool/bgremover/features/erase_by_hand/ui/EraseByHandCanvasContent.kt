@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.magnifier
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -16,12 +17,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import com.imagetool.bgremover.features.erase_by_hand.DrawingByHandAction
 import com.imagetool.bgremover.features.erase_by_hand.EraseByHandViewModel
 import com.imagetool.bgremover.util.scaledBitmapIfNeeded
@@ -37,6 +42,7 @@ fun EraseByHandCanvasContent(
     val drawingByHandState = eraseByHandViewModel.drawingByHandState.collectAsState()
     val bitmap = eraseByHandViewModel.pickedImage.collectAsState()
     val canvasIsReady = remember { mutableStateOf(false) }
+    val magnifierOffset = remember { mutableStateOf(Offset.Unspecified) }
 
     LaunchedEffect(
         canvasIsReady.value,
@@ -93,6 +99,22 @@ fun EraseByHandCanvasContent(
     ) {
         Canvas(modifier = Modifier
             .fillMaxSize()
+            .magnifier(
+                size = DpSize(100.dp, 80.dp),
+                magnifierCenter = {
+                    if (magnifierOffset.value != Offset.Unspecified) {
+                        Offset(
+                            magnifierOffset.value.x,
+                            (magnifierOffset.value.y - 200)
+                        )
+                    } else {
+                        Offset.Unspecified
+                    }
+                },
+                sourceCenter = {
+                    magnifierOffset.value
+                },
+            )
             .onPlaced { layoutCoordinates ->
                 eraseByHandViewModel.setCanvasSize(layoutCoordinates.size)
                 canvasIsReady.value = true
@@ -100,6 +122,7 @@ fun EraseByHandCanvasContent(
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDrag = { change, _ ->
+                        magnifierOffset.value = change.position
                         eraseByHandViewModel.onDrawingAction(
                             DrawingByHandAction.OnDraw(
                                 offset = change.position
@@ -115,6 +138,7 @@ fun EraseByHandCanvasContent(
                         )
                     },
                     onDragEnd = {
+                        magnifierOffset.value = Offset.Unspecified
                         eraseByHandViewModel.onDrawingAction(
                             DrawingByHandAction.OnPathEnd()
                         )
