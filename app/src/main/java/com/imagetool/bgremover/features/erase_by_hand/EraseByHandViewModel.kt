@@ -56,7 +56,7 @@ class EraseByHandViewModel(
     @RequiresApi(Build.VERSION_CODES.Q)
     fun onDrawingAction(action: DrawingByHandAction) {
         when (action) {
-            is DrawingByHandAction.onNewPathDraw -> {
+            is DrawingByHandAction.OnNewPathDraw -> {
                 action.offset?.let {
                     _drawingByHandState.value =
                         _drawingByHandState.value.copy(currentPath = Path().apply {
@@ -68,26 +68,26 @@ class EraseByHandViewModel(
                 }
             }
 
-            is DrawingByHandAction.onDraw -> {
+            is DrawingByHandAction.OnDraw -> {
                 action.offset?.let {
                     _drawingByHandState.value.currentPath.lineTo(x = it.x, y = it.y)
                 }
             }
 
-            is DrawingByHandAction.onClear -> {
+            is DrawingByHandAction.OnClear -> {
                 _drawingByHandState.value =
                     DrawingByHandState(canvasSize = drawingByHandState.value.canvasSize)
                 setTempBitmap(recreateDrawedBitmap())
             }
 
-            is DrawingByHandAction.onPathEnd -> {
+            is DrawingByHandAction.OnPathEnd -> {
                 _drawingByHandState.value = _drawingByHandState.value.copy(
                     undoStack = (_drawingByHandState.value.undoStack + _drawingByHandState.value.currentPath).toList(),
                     currentPath = Path()
                 )
             }
 
-            is DrawingByHandAction.onUndo -> {
+            is DrawingByHandAction.OnUndo -> {
                 if (_drawingByHandState.value.undoStack.isEmpty()) return
 
                 val lastItem = _drawingByHandState.value.undoStack.last()
@@ -100,7 +100,7 @@ class EraseByHandViewModel(
 
             }
 
-            is DrawingByHandAction.onRedo -> {
+            is DrawingByHandAction.OnRedo -> {
                 if (_drawingByHandState.value.redoStack.isEmpty()) return
 
                 val lastItem = _drawingByHandState.value.redoStack.last()
@@ -194,10 +194,10 @@ data class DrawingByHandState(
 )
 
 sealed interface DrawingByHandAction {
-    data class onNewPathDraw(val offset: Offset? = null) : DrawingByHandAction
-    data class onDraw(val offset: Offset? = null) : DrawingByHandAction
-    data class onPathEnd(val path: Path? = null) : DrawingByHandAction
-    data object onClear : DrawingByHandAction
-    data object onUndo : DrawingByHandAction
-    data object onRedo : DrawingByHandAction
+    data class OnNewPathDraw(val offset: Offset? = null) : DrawingByHandAction
+    data class OnDraw(val offset: Offset? = null) : DrawingByHandAction
+    data class OnPathEnd(val path: Path? = null) : DrawingByHandAction
+    data object OnClear : DrawingByHandAction
+    data object OnUndo : DrawingByHandAction
+    data object OnRedo : DrawingByHandAction
 }
