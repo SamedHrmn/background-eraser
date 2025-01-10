@@ -4,16 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.BlendMode
-import android.graphics.Paint
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.asAndroidPath
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,6 +21,7 @@ import com.imagetool.bgremover.MainActivity
 import com.imagetool.bgremover.common.use_cases.SaveImageUseCase
 import com.imagetool.bgremover.util.ImageUtil
 import com.imagetool.bgremover.util.IntentUtil
+import com.imagetool.bgremover.util.scaledBitmapIfNeeded
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -56,60 +57,74 @@ class EraseByHandViewModel(
     @RequiresApi(Build.VERSION_CODES.Q)
     fun onDrawingAction(action: DrawingByHandAction) {
         when (action) {
-            is DrawingByHandAction.onNewPathDraw -> {
+            is DrawingByHandAction.OnNewPathDraw -> {
                 action.offset?.let {
-                    _drawingByHandState.value =
-                        _drawingByHandState.value.copy(currentPath = Path().apply {
-                            moveTo(
-                                x = it.x,
-                                y = it.y
-                            )
-                        })
+                    _drawingByHandState.update { state ->
+                        state.copy(
+                            lastAction = action,
+                            currentPath = Path().apply {
+                                moveTo(
+                                    x = it.x,
+                                    y = it.y
+                                )
+                            },
+                        )
+                    }
+
                 }
             }
 
-            is DrawingByHandAction.onDraw -> {
+            is DrawingByHandAction.OnDraw -> {
                 action.offset?.let {
+                    _drawingByHandState.update { state ->
+                        state.copy(lastAction = action)
+                    }
                     _drawingByHandState.value.currentPath.lineTo(x = it.x, y = it.y)
                 }
             }
 
-            is DrawingByHandAction.onClear -> {
+            is DrawingByHandAction.OnClear -> {
                 _drawingByHandState.value =
-                    DrawingByHandState(canvasSize = drawingByHandState.value.canvasSize)
-                setTempBitmap(recreateDrawedBitmap())
+                    DrawingByHandState(
+                        canvasSize = drawingByHandState.value.canvasSize,
+                        lastAction = action,
+                    )
+                setTempBitmap(recreateBitmapCanvasWithUndo())
             }
 
-            is DrawingByHandAction.onPathEnd -> {
+            is DrawingByHandAction.OnPathEnd -> {
                 _drawingByHandState.value = _drawingByHandState.value.copy(
                     undoStack = (_drawingByHandState.value.undoStack + _drawingByHandState.value.currentPath).toList(),
-                    currentPath = Path()
+                    currentPath = Path(),
+                    lastAction = action,
                 )
             }
 
-            is DrawingByHandAction.onUndo -> {
+            is DrawingByHandAction.OnUndo -> {
                 if (_drawingByHandState.value.undoStack.isEmpty()) return
 
                 val lastItem = _drawingByHandState.value.undoStack.last()
                 _drawingByHandState.value = _drawingByHandState.value.copy(
                     undoStack = _drawingByHandState.value.undoStack.dropLast(1).toList(),
                     redoStack = (_drawingByHandState.value.redoStack + lastItem).toList(),
+                    lastAction = action,
                 )
 
-                setTempBitmap(recreateDrawedBitmap())
+                setTempBitmap(recreateBitmapCanvasWithUndo())
 
             }
 
-            is DrawingByHandAction.onRedo -> {
+            is DrawingByHandAction.OnRedo -> {
                 if (_drawingByHandState.value.redoStack.isEmpty()) return
 
                 val lastItem = _drawingByHandState.value.redoStack.last()
 
                 _drawingByHandState.value = _drawingByHandState.value.copy(
                     redoStack = _drawingByHandState.value.redoStack.dropLast(1).toList(),
-                    undoStack = (_drawingByHandState.value.undoStack + lastItem).toList()
+                    undoStack = (_drawingByHandState.value.undoStack + lastItem).toList(),
+                    lastAction = action,
                 )
-                setTempBitmap(recreateDrawedBitmap())
+                setTempBitmap(recreateBitmapCanvasWithUndo())
             }
         }
     }
@@ -149,36 +164,30 @@ class EraseByHandViewModel(
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun recreateDrawedBitmap(): Bitmap? {
+    private fun recreateBitmapCanvasWithUndo(): Bitmap? {
         if (pickedImage.value == null) return null
 
         val paint = Paint().apply {
             isAntiAlias = true
-            color = Color.Transparent.toArgb()
-            style = Paint.Style.STROKE
+            color = Color.Transparent
+            style = PaintingStyle.Stroke
             strokeWidth = drawingByHandState.value.eraseBrushSize
-            blendMode = BlendMode.CLEAR
+            blendMode = BlendMode.Clear
         }
 
-        val scaledBitmap = Bitmap.createScaledBitmap(
-            pickedImage.value!!,
-            drawingByHandState.value.canvasSize.width,
-            drawingByHandState.value.canvasSize.height,
-            false
-        )
+        val scaledBitmap = pickedImage.value!!.scaledBitmapIfNeeded(drawingByHandState.value.canvasSize)!!
 
         val mutableBitmap = scaledBitmap.copy(Bitmap.Config.ARGB_8888, true)
 
-        val combinedCanvas = android.graphics.Canvas(mutableBitmap)
-        combinedCanvas.drawBitmap(
-            mutableBitmap,
-            0f,
-            0f,
-            null
+        val combinedCanvas = androidx.compose.ui.graphics.Canvas(mutableBitmap.asImageBitmap())
+        combinedCanvas.drawImage(
+            mutableBitmap.asImageBitmap(),
+            Offset.Zero,
+            Paint()
         )
 
         drawingByHandState.value.undoStack.forEach { pathData ->
-            combinedCanvas.drawPath(pathData.asAndroidPath(), paint)
+            combinedCanvas.drawPath(pathData, paint)
         }
         return mutableBitmap
     }
@@ -191,13 +200,14 @@ data class DrawingByHandState(
     val tempBitmap: Bitmap? = null,
     val eraseBrushSize: Float = 32f,
     val canvasSize: IntSize = IntSize.Zero,
+    val lastAction: DrawingByHandAction? = null,
 )
 
 sealed interface DrawingByHandAction {
-    data class onNewPathDraw(val offset: Offset? = null) : DrawingByHandAction
-    data class onDraw(val offset: Offset? = null) : DrawingByHandAction
-    data class onPathEnd(val path: Path? = null) : DrawingByHandAction
-    data object onClear : DrawingByHandAction
-    data object onUndo : DrawingByHandAction
-    data object onRedo : DrawingByHandAction
+    data class OnNewPathDraw(val offset: Offset? = null) : DrawingByHandAction
+    data class OnDraw(val offset: Offset? = null) : DrawingByHandAction
+    data class OnPathEnd(val path: Path? = null) : DrawingByHandAction
+    data object OnClear : DrawingByHandAction
+    data object OnUndo : DrawingByHandAction
+    data object OnRedo : DrawingByHandAction
 }

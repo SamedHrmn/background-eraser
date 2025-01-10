@@ -37,13 +37,18 @@ class ImageUtil {
         val request = ImageRequest.Builder(context).data(uri).build()
 
         val result = withContext(Dispatchers.IO) {
-            val response = loader.execute(request)
-            if (response is SuccessResult) {
-                response.image.toBitmap()
-            } else if (response is ErrorResult) {
-                throw response.throwable
-            } else {
-                throw Exception("Unknown error while loading image")
+            when (val response = loader.execute(request)) {
+                is SuccessResult -> {
+                    response.image.toBitmap()
+                }
+
+                is ErrorResult -> {
+                    throw response.throwable
+                }
+
+                else -> {
+                    throw Exception("Unknown error while loading image")
+                }
             }
         }
 
