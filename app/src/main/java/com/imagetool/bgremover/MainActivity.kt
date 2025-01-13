@@ -7,7 +7,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.SavedStateHandle
+import com.imagetool.bgremover.common.navigation.AppNavigation
+import com.imagetool.bgremover.common.provider.AppLocaleProvider
 import com.imagetool.bgremover.common.use_cases.SaveImageUseCase
 import com.imagetool.bgremover.features.erase.BackgroundEraserViewModel
 import com.imagetool.bgremover.features.pick_crop.PickCropViewModel
@@ -18,12 +22,12 @@ import com.imagetool.bgremover.features.erase_by_hand.EraseByHandViewModel
 import com.imagetool.bgremover.features.feedback.FeedbackViewModel
 import com.imagetool.bgremover.features.rate_us.RateUsViewModel
 import com.imagetool.bgremover.features.share_us.ShareUsViewModel
+import com.imagetool.bgremover.theme.ImagetoolbackgroundremoverTheme
 import com.imagetool.bgremover.util.ImageUtil
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import org.koin.compose.KoinContext
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -59,7 +63,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             KoinAndroidContext{
-                MyApp()
+                AppLocaleProvider(LocalContext.current) {
+                    ImagetoolbackgroundremoverTheme {
+                        AppNavigation()
+                    }
+                }
             }
         }
     }
@@ -97,7 +105,9 @@ val appModule = module {
     viewModel {
         EraseByHandViewModel(
             imageUtil = get<ImageUtil>(),
-            saveImageUseCase = get<SaveImageUseCase>()
+            saveImageUseCase = get<SaveImageUseCase>(),
+            context = androidContext(),
+            savedStateHandle = get<SavedStateHandle>()
         )
     }
 }

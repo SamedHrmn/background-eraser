@@ -110,6 +110,7 @@ dependencies {
     implementation(libs.review)
     implementation(libs.review.ktx)
     implementation(libs.androidx.datastore)
+    implementation(libs.androidx.navigation.compose)
     implementation (libs.koin.androidx.compose)
 
 }

@@ -1,7 +1,7 @@
 [versions]
 aboutlibrariesComposeM3 = "11.2.3"
 accompanistPermissions = "0.36.0"
-agp = "8.7.3"
+agp = "8.8.0"
 androidImageCropper = "4.6.0"
 billing = "7.1.1"
 coilCompose = "3.0.4"
@@ -17,6 +17,7 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
 composeBom = "2024.12.01"
 lottieCompose = "6.6.1"
+navigationCompose = "2.8.5"
 playServicesAds = "23.6.0"
 playServicesMlkitSubjectSegmentation = "16.0.0-beta1"
 review = "2.0.2"
@@ -31,6 +32,7 @@ android-image-cropper = { module = "com.vanniktech:android-image-cropper", versi
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
