@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.imagetool.bgremover.R
+import com.imagetool.bgremover.common.provider.LocalNavController
 import com.imagetool.bgremover.common.provider.LocalResources
 import com.imagetool.bgremover.common.ui.AppElevatedButton
 import com.imagetool.bgremover.common.ui.AppText
@@ -26,12 +27,13 @@ fun EraseByHandCanvasBottomToolbar(eraseByHandViewModel: EraseByHandViewModel = 
 
     val localContext = LocalContext.current
     val localResource = LocalResources.current
+    val localNavController = LocalNavController.current
     val coroutineScopeState = rememberCoroutineScope()
     val drawingByHandState = eraseByHandViewModel.drawingByHandState.collectAsState()
 
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
         AppElevatedButton(modifier = Modifier.defaultMinSize(minWidth = 100.dp), onClick = {
-            eraseByHandViewModel.navigateMainActivity(context = localContext)
+            eraseByHandViewModel.navigateMainActivity(navController = localNavController)
         }) {
             AppText(localResource.getString(R.string.erasebyhand_back_button_text))
         }
@@ -57,7 +59,7 @@ fun EraseByHandCanvasBottomToolbar(eraseByHandViewModel: EraseByHandViewModel = 
                         }
                     }
 
-                    eraseByHandViewModel.navigateMainActivity(context = localContext)
+                    eraseByHandViewModel.navigateMainActivity(navController = localNavController)
                 }
 
             }) {

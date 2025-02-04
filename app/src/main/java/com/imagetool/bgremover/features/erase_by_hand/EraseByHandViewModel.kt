@@ -15,12 +15,16 @@ import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.IntSize
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.imagetool.bgremover.MainActivity
+import com.imagetool.bgremover.common.navigation.AppNavigationArgKeys
+import com.imagetool.bgremover.common.navigation.getAppArg
 import com.imagetool.bgremover.common.use_cases.SaveImageUseCase
 import com.imagetool.bgremover.util.ImageUtil
-import com.imagetool.bgremover.util.IntentUtil
+
 import com.imagetool.bgremover.util.scaledBitmapIfNeeded
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,6 +32,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class EraseByHandViewModel(
+    private val savedStateHandle: SavedStateHandle,
+    context: Context,
     private val imageUtil: ImageUtil,
     private val saveImageUseCase: SaveImageUseCase
 ) : ViewModel() {
@@ -35,6 +41,10 @@ class EraseByHandViewModel(
     val pickedImage = _pickedImageState.asStateFlow()
     private val _drawingByHandState = MutableStateFlow(DrawingByHandState())
     val drawingByHandState = _drawingByHandState.asStateFlow()
+
+    init {
+        setPickedImageUri(context)
+    }
 
     fun setDrawingBrushSize(size: Float) {
         _drawingByHandState.update {
@@ -129,8 +139,9 @@ class EraseByHandViewModel(
         }
     }
 
-    fun setPickedImageUri(uriString: String, context: Context) {
-        val uri = Uri.parse(uriString)
+    private fun setPickedImageUri(context: Context) {
+        val uriStringArg = savedStateHandle.getAppArg<String>(AppNavigationArgKeys.PickedImageUri)
+        val uri = Uri.parse(uriStringArg)
 
         viewModelScope.launch {
             imageUtil.uriToBitmap(
@@ -155,12 +166,8 @@ class EraseByHandViewModel(
         )
     }
 
-    fun navigateMainActivity(context: Context) {
-        IntentUtil.intent(
-            context = context,
-            dest = MainActivity::class.java,
-            flags = listOf(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-        )
+    fun navigateMainActivity(navController:NavController) {
+        navController.popBackStack()
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)

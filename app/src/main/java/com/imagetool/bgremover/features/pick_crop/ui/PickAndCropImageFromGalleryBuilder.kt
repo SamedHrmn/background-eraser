@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.imagetool.bgremover.R
+import com.imagetool.bgremover.common.provider.LocalNavController
 import com.imagetool.bgremover.common.provider.LocalResources
 import com.imagetool.bgremover.common.ui.AppElevatedButton
 import com.imagetool.bgremover.common.ui.AppText
@@ -36,6 +37,7 @@ fun PickAndCropImageFromGalleryBuilder(
     val context = LocalContext.current
     val selectedImageState = pickCropViewModel.pickedImage.collectAsState()
     val localResource = LocalResources.current
+    val localNavController = LocalNavController.current
 
     when (val bitmap = selectedImageState.value) {
         null -> {
@@ -91,7 +93,7 @@ fun PickAndCropImageFromGalleryBuilder(
                     AppElevatedButton(
                         modifier = Modifier.defaultMinSize(minWidth = 100.dp),
                         onClick = {
-                            pickCropViewModel.navigateEraseByHand(context = context)
+                            pickCropViewModel.navigateEraseByHand(navController = localNavController)
                         }) {
                         AppText(
                             text = localResource.getString(R.string.erasebyhand_button_text),

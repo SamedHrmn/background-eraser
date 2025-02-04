@@ -109,10 +109,6 @@
             android:name="com.canhub.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
 
-        <activity android:name=".features.erase_by_hand.ui.EraseByHandActivity"
-            android:theme="@style/Base.Theme.AppCompat">
-        </activity>
-
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="subject_segment" />
