@@ -61,5 +61,5 @@ richtext-commonmark = { module = "com.halilibo.compose-richtext:richtext-commonm
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-aboutlibraries = {id = "com.mikepenz.aboutlibraries.plugin", version = "11.2.3"}
+aboutlibraries = {id = "com.mikepenz.aboutlibraries.plugin", version = "11.6.2"}
 
