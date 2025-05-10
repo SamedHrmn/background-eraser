@@ -1,5 +1,5 @@
 [versions]
-aboutlibrariesComposeM3 = "11.2.3"
+aboutlibrariesComposeM3 = "12.0.1"
 accompanistPermissions = "0.36.0"
 agp = "8.8.0"
 androidImageCropper = "4.6.0"
