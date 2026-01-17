@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
+import androidx.core.graphics.scale
 
 fun IntSize.sizeIsEqual(size:IntSize?):Boolean{
     return width == size?.width && height == size.height
@@ -37,7 +38,7 @@ fun IntSize.sizeIsEqual(size:IntSize?):Boolean{
 fun Bitmap?.scaledBitmapIfNeeded(targetSize:IntSize):Bitmap?{
     if(this == null) return null
     if(targetSize.sizeIsEqual(IntSize(this.width,this.height))) return this
-    return Bitmap.createScaledBitmap(this,targetSize.width,targetSize.height,false)
+    return this.scale(targetSize.width, targetSize.height, false)
 }
 
 fun Context.openAppSettings() {
@@ -63,7 +64,7 @@ suspend fun isUrlReachable(url: String): Boolean {
             val connection = URL(url).openConnection() as HttpURLConnection
             connection.requestMethod = "HEAD"
             connection.responseCode == HttpURLConnection.HTTP_OK
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }

@@ -22,11 +22,10 @@ import com.imagetool.bgremover.R
 import com.imagetool.bgremover.common.provider.LocalResources
 import com.imagetool.bgremover.common.ui.AppElevatedButton
 import com.imagetool.bgremover.common.ui.AppText
-import com.imagetool.bgremover.features.subscription.SubscriptionViewModel
 import com.imagetool.bgremover.theme.Typography
 
 @Composable
-fun GetPremiumButton(subscriptionViewModel: SubscriptionViewModel) {
+fun GetPremiumButton() {
 
     val showSubscriptionDialogState = remember {
         mutableStateOf(false)
@@ -59,7 +58,6 @@ fun GetPremiumButton(subscriptionViewModel: SubscriptionViewModel) {
             AppText(
                 localResource.getString(R.string.get_pro_button_text),
                 style = Typography.titleSmall,
-                fontSize = 14.sp,
             )
         }
     }
@@ -69,7 +67,7 @@ fun GetPremiumButton(subscriptionViewModel: SubscriptionViewModel) {
             onDismiss = {
                 showSubscriptionDialogState.value = false
             },
-            subscriptionViewModel = subscriptionViewModel,
+
         )
     }
 }

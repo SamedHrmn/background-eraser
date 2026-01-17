@@ -5,13 +5,17 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.window.DialogProperties
 import com.imagetool.bgremover.common.provider.LocalResources
 import com.imagetool.bgremover.common.ui.AppText
+import com.imagetool.bgremover.theme.Typography
 
 @Composable
 fun AppAlertDialog(
@@ -21,6 +25,7 @@ fun AppAlertDialog(
     @StringRes titleText: Int,
     @StringRes contentText: Int? = null,
     content: @Composable (() -> Unit)? = null,
+    titleStyle: TextStyle = Typography.titleSmall,
     onDismiss: () -> Unit,
 ) {
     val showDialogState = remember {
@@ -36,7 +41,7 @@ fun AppAlertDialog(
         modifier = modifier,
         properties = DialogProperties(
             dismissOnBackPress = true,
-            dismissOnClickOutside = false,
+            dismissOnClickOutside = true,
             usePlatformDefaultWidth = false,
         ),
         onDismissRequest = {
@@ -52,12 +57,15 @@ fun AppAlertDialog(
                         onDismiss()
                     }) {
                         AppText(localResources.getString(confirmButtonText))
+
                     }
                 }
             }
         },
         title = {
-            AppText(localResources.getString(titleText))
+            AppText(
+                localResources.getString(titleText), style = titleStyle,
+            )
         },
         text = {
             when {

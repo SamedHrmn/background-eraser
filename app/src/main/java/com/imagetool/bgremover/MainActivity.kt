@@ -51,7 +51,6 @@ class MainActivity : ComponentActivity() {
             parallelTasks = listOf(
                 { backgroundEraserViewModel.initializeEraser() },
                 { splashViewModel.configAdManager() },
-                { subscriptionViewModel.initBillingClient(context = applicationContext) },
                 { rateUsViewModel.initReview(context = applicationContext) }
             )
         )
@@ -63,7 +62,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            KoinAndroidContext{
+            KoinAndroidContext {
                 AppLocaleProvider(LocalContext.current) {
                     ImagetoolbackgroundremoverTheme {
                         AppNavigation()
@@ -74,7 +73,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-class MyApplication: Application(){
+class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 

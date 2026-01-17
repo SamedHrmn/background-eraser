@@ -16,7 +16,7 @@ object FileUtil {
 
             try {
                 context.startActivity(intent)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 onError()
             }
         } else {
@@ -27,7 +27,7 @@ object FileUtil {
 
             try {
                 context.startActivity(pickImageIntent)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 onError()
             }
         }

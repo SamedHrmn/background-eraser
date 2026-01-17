@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.imagetool.bgremover"
-    compileSdk = 35
+    compileSdk = 36
 
     val _versionCode:Int
     val _major: Int
@@ -34,7 +34,7 @@ android {
     defaultConfig {
         applicationId = "com.imagetool.bgremover"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = _versionCode
         versionName = "${_major}.${_minor}.(${_versionCode})"
 

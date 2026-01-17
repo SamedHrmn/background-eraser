@@ -43,7 +43,7 @@ fun OpenDirectoryButton(modifier: Modifier = Modifier) {
                 tint = BlackText
             )
             Spacer(Modifier.width(8.dp))
-            AppText(localResources.getString(R.string.open_folder_button_text), fontSize = 16.sp)
+            AppText(localResources.getString(R.string.open_folder_button_text))
         }
     }
 

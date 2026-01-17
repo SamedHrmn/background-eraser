@@ -46,9 +46,6 @@ class ImageUtil {
                     throw response.throwable
                 }
 
-                else -> {
-                    throw Exception("Unknown error while loading image")
-                }
             }
         }
 

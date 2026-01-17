@@ -25,6 +25,7 @@ import com.imagetool.bgremover.features.subscription.ui.GetPremiumButton
 import com.imagetool.bgremover.features.subscription.ui.ProCard
 import com.imagetool.bgremover.theme.Diamond
 import com.imagetool.bgremover.theme.Green1
+import com.imagetool.bgremover.theme.Typography
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -56,12 +57,12 @@ fun AppTopBar(subscriptionViewModel: SubscriptionViewModel = koinViewModel()) {
         title = {
             AppText(
                 LocalResources.current.getString(R.string.app_name),
-                fontSize = 18.sp
+                style = Typography.titleMedium
             )
         },
         actions = {
             if (showPremiumButton.value) {
-                GetPremiumButton(subscriptionViewModel = subscriptionViewModel)
+                GetPremiumButton()
             } else {
                 ProCard()
             }

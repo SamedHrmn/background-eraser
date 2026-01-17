@@ -1,7 +1,9 @@
 package com.imagetool.bgremover
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.imagetool.bgremover.common.ui.AppLoadingOverlay
 import com.imagetool.bgremover.common.ui.AppTopBar
 import com.imagetool.bgremover.common.ui.OpenDirectoryButton
@@ -34,6 +35,7 @@ import com.imagetool.bgremover.features.rate_us.RateUsViewModel
 import com.imagetool.bgremover.features.subscription.SubscriptionViewModel
 import org.koin.androidx.compose.koinViewModel
 
+@SuppressLint("ContextCastToActivity")
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun HomeView(
@@ -41,6 +43,10 @@ fun HomeView(
     backgroundEraserViewModel: BackgroundEraserViewModel = koinViewModel(),
     rateUsViewModel: RateUsViewModel = koinViewModel(),
 ) {
+    val activity = LocalContext.current as Activity
+    LaunchedEffect(subscriptionViewModel) {
+        subscriptionViewModel.initBillingClient(activity)
+    }
 
 
     val segmentResultState = backgroundEraserViewModel.segmentResult.collectAsState()
@@ -101,6 +107,4 @@ fun HomeView(
             }
         }
     }
-
-
 }
